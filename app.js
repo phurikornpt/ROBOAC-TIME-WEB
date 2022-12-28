@@ -29,7 +29,8 @@ con.connect(function(err) {
 });
 
 app.get("/",function(req,res){
-    
+    // for test UI
+    // req.session.user = "HOHO"
 
     let data = {
         session:{
@@ -37,6 +38,16 @@ app.get("/",function(req,res){
         }
     }
     res.render('page',{data:data});
+})
+app.get("/job",function(req,res){
+    // for test UI
+    req.session.user = "HOHO"
+    let data = {
+        session:{
+            user:req.session.user || ''
+        }
+    }
+    res.render('page_job',{data:data});
 })
 
 app.post("/login",function(req,res){

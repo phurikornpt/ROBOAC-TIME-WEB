@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="axios/axios.min.js"></script>
+</head>
+<body>
+
+
+    <nav class="navbar navbar-expand-lg bg-dark-50 ">
+        <div class="container-fluid">
+          <a class="navbar-brand fs-4 fw-bold" href="#">DOC</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              
+           
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+<!-- test -->
+
+
+<!-- <div class="row d-grid justify-content-center">
+    <div class="col-6">
+        <label for="">start</label><input type="time" name="start" id="">
+    </div>
+    <div class="col-6">
+        <label for="">stop</label><input type="time" name="stop" id="">
+    </div>
+    <button class="btn btn-secondary mt-5" onclick="calTime()">Cal</button>
+
+</div>
+<p id="time" class="text-center"></p>
+
+<script>
+    function calTime(){
+        let start = document.querySelector("input[name=start]");
+        let stop = document.querySelector("input[name=stop]");
+        start = start.value
+        stop = stop.value
+
+        let start_h = Number(start.substring(0,2));
+        let start_m = Number(start.substring(3,start.length));
+        let stop_h = Number(stop.substring(0,2));
+        let stop_m = Number(stop.substring(3,stop.length));
+
+        let h =0;
+        let m =0;
+
+        if(start_h <= stop_h){
+            let m1 = (start_h * 60) + start_m;
+            let m2 = (stop_h * 60) + stop_m;
+            let dis = m2 - m1;
+            h = parseInt(dis/60);
+            m = dis % 60;
+
+        }else{
+            let midni_m = (24*60) - ( (start_h*60) +start_m )
+            let m2 =(stop_h * 60) + stop_m
+            let s = midni_m + m2
+            h = parseInt(s/60)
+            m = s % 60
+        }
+
+        document.getElementById("time").innerText="H : "+h+" M :"+m;
+        console.log(start);
+        console.log(stop);
+
+
+    }
+
+
+</script> -->
+
+
+
+
+
+
+<!-- test -->
+
+
+    <% if (data.session.user != ''){%>
+
+        <div class="container">
+            <h1 id="user" class="text-center"></h1>
+            <div class="justify-content-center d-grid mt-5 p-5" >
+                <form id="myform" action="/logout" method="post" class="d-grid justify-content-center">
+        
+                <div class="card btn" onclick="logout_on()" style="width: 18rem;">
+                    
+                    
+                    <div class="card-body  " >
+          
+                        <h5 id="logout" class="card-title "></h5>
+    
+                    </div>
+                    
+                </div>
+            </form>
+            </div>
+        </div>    
+        <script>
+            let word_user = "Welcome:<%-data.session.user_%>";
+            let user  = document.getElementById('user');
+            let index_user  = 0;
+            let time_user  = setInterval(function(){
+                
+                user.innerText += word_user[index_user];
+                index_user += 1;
+                if(user.innerText.length >= word_user.length){
+                    clearInterval(time_user)
+                }
+                
+            },100);
+
+            let word_logout = "Logout."
+            let logout  = document.getElementById('logout');
+            let index_logout  = 0;
+            let time_logout  = setInterval(function(){
+                
+                if(index_logout < word_logout.length){
+                    logout.innerText += word_logout[index_logout];
+                    index_logout+= 1;
+                }else{
+                    clearInterval(time_logout)
+                }
+            },300);
+            
+
+          
+            
+
+
+        </script>    
+        
+    <% }else{%>
+        <div class="container">
+            <div class="justify-content-center d-grid mt-5 p-5" >
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body btn " data-bs-toggle="modal" data-bs-target="#login_page">
+                    <h5 id="login" class="card-title text-center"></h5>
+    
+                    </div>
+                </div>
+                <div class="card" >
+                    <div class="card-body btn " data-bs-toggle="modal" data-bs-target="#register_page">
+                    <h5 id="register" class="card-title text-center"></h5>
+    
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <script>
+            let word_log = "Login.";
+            let login = document.getElementById('login');
+            let index_log = 0;
+            let time_log = setInterval(function(){
+                
+                login.innerText += word_log[index_log];
+                index_log += 1;
+                if(login.innerText == word_log){
+                    clearInterval(time_log)
+                }
+                
+            },200);
+            let word_reg = "Register.";
+            let reg = document.getElementById('register');
+            let index_reg = 0;
+            let time_reg = setInterval(function(){
+                
+                reg.innerText += word_reg[index_reg];
+                index_reg += 1;
+                if(reg.innerText == word_reg){
+                    clearInterval(time_reg)
+
+                }
+                
+            },150);
+
+        </script>    
+    <% }%>
+  
+   
+    
+    <!-- Modal -->
+    <div class="modal fade" id="login_page" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">Login</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert  alert-danger" id="alert_login">รหัสไม่ถูกต้อง</div>
+                <!-- <form action="/login" method="post"> -->
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label">Username</label>
+                          <input type="text" class="form-control"   name ="user">
+                        </div>
+                        <div class="mb-3">
+                          <label for="exampleInputPassword1" class="form-label">Password</label>
+                          <input type="password" class="form-control" name ="pass">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary float-end" onclick="val_login()">Submit</button>
+                <!-- </form> -->
+            </div>
+     
+        </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="register_page" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">Register</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert  alert-danger" id="alert_username">มี Username นี้อยู่เเล้ว</div>
+                <div class="alert  alert-danger" id="alert_name">มีชื่อนี้อยู่เเล้ว</div>
+                <div class="alert  alert-success" id="alert_done">สมัครสมาชิกเรียบร้อย</div>
+                <!-- <form action="/register" method="post"> -->
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Name (ภาษาไทย)</label>
+                            <input type="text" class="form-control"   name ="name_reg" placeholder="ต้นข้าว เป็นต้น">
+                        </div>
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label">Username</label>
+                          <input type="text" class="form-control"   name ="user_reg">
+                        </div>
+                        <div class="mb-3">
+                          <label for="exampleInputPassword1" class="form-label">Password</label>
+                          <input type="password" class="form-control" name ="pass_reg">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary float-end" onclick = "val_register()" id="regis_btn">Submit</button>
+                <!-- </form> -->
+            </div>
+     
+        </div>
+        </div>
+    </div>
+
+
+<script>
+    let alert_login = document.querySelector("#alert_login");
+    let alert_username = document.querySelector("#alert_username");
+    let alert_name = document.querySelector("#alert_name");
+    let alert_done = document.querySelector("#alert_done");
+
+    alert_login.classList.add('d-none');
+
+    alert_username.classList.add('d-none');
+    alert_name.classList.add('d-none');
+    alert_done.classList.add('d-none');
+
+
+    function logout_on(){
+        document.getElementById("myform").submit();
+    }
+    function val_register(){
+        let name = document.querySelector("input[name=name_reg]").value;
+        let user = document.querySelector("input[name=user_reg]").value;
+        let pass = document.querySelector("input[name=pass_reg]").value;
+        if( user == "" || pass =="" || name == ""){
+            alert("ใส่ให้ครบ");
+        }else{   
+            let params =new URLSearchParams();
+                params.append('name',name);
+                params.append('user',user);
+                params.append('pass',pass);
+                axios({
+                    url:'/register',
+                    method:'post',
+                    data:params,
+                    timeout:3000
+                }).then((result)=>{
+                    let getData =result.data.status;
+                    console.log(getData);
+                    if( getData == "username" ){
+                        alert_username.classList.remove('d-none');
+                    }else if( getData == "name" ){
+                        alert_name.classList.remove('d-none');
+                    }else{
+                        alert_username.classList.add('d-none');
+                        alert_name.classList.add('d-none');
+                        alert_done.classList.remove('d-none');
+                        document.querySelector("#regis_btn").classList.add('d-none');
+                    }
+
+                })
+        }
+    }
+    function val_login(){
+        let user = document.querySelector("input[name=user]").value;
+        let pass = document.querySelector("input[name=pass]").value;
+        if( user == "" || pass ==""){
+            alert("ใส่ให้ครบ");
+        }else{   
+            let params =new URLSearchParams();
+                params.append('user',user);
+                params.append('pass',pass);
+                axios({
+                    url:'/login',
+                    method:'post',
+                    data:params,
+                    timeout:3000
+                }).then((result)=>{
+                    if( result.data.status == 1 ){
+                        window.location="/";
+                    }else {
+                        alert_login.classList.remove('d-none');
+                    }
+
+                })
+        }
+    }
+
+</script>
+
+</body>
+</html>

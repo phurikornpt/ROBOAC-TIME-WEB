@@ -30,7 +30,9 @@ con.connect(function(err) {
 
 app.get("/",function(req,res){
     // for test UI
-    // req.session.user = "HOHO"
+    // console.log(req.session.user_id);
+    req.session.user = "admin";
+    req.session.user_id = 11;
 
     let data = {
         session:{
@@ -39,16 +41,117 @@ app.get("/",function(req,res){
     }
     res.render('page',{data:data});
 })
+
+
+/* ----------เวลางาน---------- */
+
 app.get("/job",function(req,res){
-    // for test UI
-    req.session.user = "HOHO"
-    let data = {
-        session:{
-            user:req.session.user || ''
+    // console.log();
+    // req.session.user = "HOHO"
+
+    if(req.session.user == "" ||req.session.user == undefined ){
+        res.redirect('/');
+    }else{
+
+        function getDaysInMonth(month, year) {
+            var date = new Date(year, month, 1);
+            var days = [];
+            while (date.getMonth() === month) {
+            days.push(new Date(date));
+            date.setDate(date.getDate() + 1);
+            }
+            return days;
         }
+        const date = new Date();
+        let date_current = getDaysInMonth(date.getMonth(),date.getFullYear())
+
+        let data = {
+            date:{
+                getDay:date.getDate(),
+                getMonth:date.getMonth(),
+                getFullMonth:date_current,
+                getYear:date.getFullYear()
+            },
+            session:{
+                user:req.session.user || ''
+            }
+        }
+        let sql = "SELECT * FROM data where data.user_id = "+req.session.user_id;
+        con.query(sql,function(err,result){
+            if(!err){
+                data["userData"]=result;
+                // console.log("dfd",data.userData);
+                res.render('page_job',{data:data});
+            }
+        })
     }
-    res.render('page_job',{data:data});
 })
+
+function cal_time(start,stop){
+    let start_h = Number(start.substring(0,2));
+    let start_m = Number(start.substring(3,start.length));
+    let stop_h = Number(stop.substring(0,2));
+    let stop_m = Number(stop.substring(3,stop.length));
+
+    let h =0;
+    let m =0;
+
+    if(start_h <= stop_h){
+        let m1 = (start_h * 60) + start_m;
+        let m2 = (stop_h * 60) + stop_m;
+        let dis = m2 - m1;
+        h = parseInt(dis/60);
+        m = dis % 60;
+
+    }else{
+        let midni_m = (24*60) - ( (start_h*60) +start_m )
+        let m2 =(stop_h * 60) + stop_m
+        let s = midni_m + m2
+        h = parseInt(s/60)
+        m = s % 60
+    }
+    return h+":"+m;
+}
+app.get("/del",function(req,res){
+    let id = req.query.id;
+    let sql =`DELETE FROM data WHERE data.id = ${parseInt(id)}`;
+    con.query(sql,function(err){
+        if(!err){
+            console.log("DONE Remove id :"+id);
+            res.redirect('/job');
+        }
+    })
+
+
+});
+
+app.post('/save_time',function(req,res){
+    let start = req.body.start;
+    let stop = req.body.stop;
+    let comment =req.body.comment;
+    let month = req.body.month_in;
+    let day =req.body.day_in ;
+    let time = cal_time(start,stop);//2022-12-29
+    let date = "2022-"+month+"-"+day;
+    sql = ` INSERT INTO data(user_id, start, stop,time,real_date,comment_data,date) VALUES 
+    ('${req.session.user_id}' , '${start}' , '${stop}', '${time}', '${date}', '${comment}', '${day}') `;
+    // sql = ` INSERT INTO data(user_id, start, stop,time,real_date,comment_data,date) VALUES 
+    // ('"+req.session.user_id+"' , '"+start+"' , '"+stop+"', '"+time+"', '"+date+"', '"+comment+"', '"+day+"')`;
+    con.query(sql,function(err,result){
+        if(!err){
+            console.log("DONE");
+            res.redirect('/job');
+        }
+    })
+    // console.log(start,stop,comment,month,day);
+
+
+});
+
+/* ----------เวลางาน---------- */
+
+
+/* ----------ลงทะเบียน---------- */
 
 app.post("/login",function(req,res){
     let user = req.body.user;
@@ -60,8 +163,10 @@ app.post("/login",function(req,res){
         if(!err){
             result.forEach(element => {
                 if(user == element.username && pass == element.password ){
-                    console.log(element);
+                    // console.log(element);
                     req.session.user= element.name ;
+                    req.session.user_id= element.user_id ;
+
                     res.send({status:1});
                     isMatch = true;
                 }
@@ -83,7 +188,7 @@ app.post("/register",function(req,res){
         if(!err){
             
             for(let element of result){
-                console.log(element);
+                // console.log(element);
                 if(user == element.username){
                     res.send({status:"username"});
                     isMatch = true;
@@ -117,5 +222,6 @@ app.post("/logout",function(req,res){
     res.redirect('/')
 })
 
+/* ----------ลงทะเบียน---------- */
 
 app.listen(3000);

@@ -24,7 +24,7 @@
 	background: #2b4450;
 	border-radius: 4px;
 	box-shadow: 0 5px 20px rgba(0, 0, 0, .3);
-	height: 550px;
+	height: 450px;
   perspective: 1000;
 	transition: .9s;
 	transform-style: preserve-3d;
@@ -84,6 +84,7 @@
 }
 
 .weeks span {
+	user-select: none;
 	padding: 10px;
 }
 

@@ -1,9 +1,12 @@
 
 <%- include("header") %> 
 
+<!-- <h1><%= data.date.getFullMonth.length %></h1> -->
+
 <div class="container-fluid">
 
-
+  
+  
     <div class="containertt">
         <div class="calendar">
           <div class="front">
@@ -13,7 +16,7 @@
             </div>
   
             <div class="current-month">
-              <ul class="week-days">
+              <!-- <ul class="week-days">
                 <li>MON</li>
                 <li>TUE</li>
                 <li>WED</li>
@@ -21,9 +24,42 @@
                 <li>FRI</li>
                 <li>SAT</li>
                 <li>SUN</li>
-              </ul>
-  
-              <div class="weeks">
+              </ul> -->
+            <div class="weeks">
+
+              <% for(let i =0;i<35;i++){%>
+
+                <% if(i < data.date.getFullMonth.length){ %> 
+                  <% let show = 0; %> 
+                      <% if(i<9){
+                        show = "0" + (i+1).toString();
+                      }else{
+                        show = i+1
+                      } %> 
+
+                      <% if(i % 7 == 0){%>
+
+                        <div class="first">
+                            <span data-bs-toggle="modal" data-bs-target="#insert" onclick="genDate('<%-show %>','<%-data.date.getMonth %>')"><%= show %> </span>
+                            
+                      <%}else if( (i % 7 == 6)){%>
+
+                            <span data-bs-toggle="modal" data-bs-target="#insert" onclick="genDate('<%-show %>','<%-data.date.getMonth %>')"><%= show %> </span>
+                        </div>
+
+                      <%}else{%>
+
+                        <span data-bs-toggle="modal" data-bs-target="#insert" onclick="genDate('<%-show %>','<%-data.date.getMonth %>')"><%= show %> </span>
+
+                      <%}%>
+                  <% }else{%> 
+                      <span style="visibility:hidden">00</span>
+                  <% } %> 
+           
+              <%}%> 
+            </div>    
+              
+              <!-- <div class="weeks">
                 <div class="first">
                   <span class="last-month">28</span>
                   <span class="last-month">29</span>
@@ -72,66 +108,187 @@
                   <span>29</span>
                   <span>30</span>
                   <span>31</span>
-                </div>
+                </div> -->
 
-              </div>
-            </div>
+              <!-- </div> -->
+            <!-- </div> -->
           </div>
   
-          <div class="back">
-            <input placeholder="What's the event?">
-            <div class="info">
-              <div class="date">
-                <p class="info-date">
-                Date: <span>Jan 15th, 2016</span>
-                </p>
-                <p class="info-time">
-                  Time: <span>6:35 PM</span>
-                </p>
-              </div>
-              <div class="address">
-                <p>
-                  Address: <span>129 W 81st St, New York, NY</span>
-                </p>
-              </div>
-              <div class="observations">
-                <p>
-                  Observations: <span>Be there 15 minutes earlier</span>
-                </p>
-              </div>
-            </div>
+          
   
-            <div class="actions">
-              <button class="save">
-                Save <i class="ion-checkmark"></i>
-              </button>
-              <button class="dismiss">
-                Dismiss <i class="ion-android-close"></i>
-              </button>
-            </div>
-          </div>
-  
-        </div>
       </div>
-        </div>
+      </div>
+      </div>
 
     </div>
 
-    <div class="row mt-5">
-        <div class="col-lg-6">
-            <p>table </p>
-        </div>
-        <div class="col-lg-6">
-            <p>table </p>
-        </div>
-    </div>
+    <div class="container">
+      <div class="row mt-5">
+        <!-- <div class="col-3"></div> -->
+          <div class="col-12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">วันที่</th>
+                  <th scope="col">เวลาเริ่ม</th>
+                  <th scope="col">เวลาหยุด</th>
+                  <th scope="col">ชั่วโมงที่ได้</th>
+                  <th scope="col">ความคิดเห็น</th>
+                  <th scope="col">ตั้งค่า</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                  <% for(let i of data.userData){%> 
+                    
+                    <tr>
+                      <th scope="row"><%=i.date %></th>
+                      <td ><%=i.start %></td>
+                      <td ><%=i.stop %></td>
+                      <td ><%=i.time %></td>
+                      <td ><%=i.comment_data %></td>
+                      <td ><button class="btn btn-danger p-1 px-2" onclick="del('<%-i.id%>')">ลบ</button></td>
+                    </tr>
+                  <% } %> 
+               
+
+
+              </tbody>
+            </table>
+          </div>
+          
+      </div>
+  </div>
 
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="insert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onfocus="">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modal_title">ลงเวลางาน </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
 
+        <!-- <div class="row" id="select_mode">
+          
+            <div class="col-6" id="mode_add" onclick="mode_add()">
+                <div class="card btn">
+                  <div class="card-body">
+                    ลงเวลางาน
+                  </div>
+                </div>
+            </div>
+            <div class="col-6" id="mode_watch">
+              <div class="card btn" onclick="mode_watch()">
+                <div class="card-body">
+                  ดูเวลางาน
+                </div>
+              </div>
+            </div>
+
+        </div> -->
+        <form action="/save_time" method="post">
+
+        <div id="to_add" class="mb-3 row text-center ">
+
+          <div class="col-4 ">
+            <p for="inputMDEx1 " class="mt-3"  >เวลาเริ่ม</p>
+          </div>
+          <div class="col-8">
+            <input type="time" id="inputMDEx1" class="form-control mt-2" name="start">
+          </div>
+
+          <div class="col-4 ">
+            <p for="inputMDEx1 " class="mt-3"  >เวลาหยุด</p>
+          </div>
+          <div class="col-8">
+            <input type="time" id="inputMDEx1" class="form-control mt-2" name="stop">
+          </div>
+          <div class="col-4 ">
+            <p for="inputMDEx1 " class="mt-3"  >comment</p>
+          </div>
+          <div class="col-8">
+            <input type="text" id="inputMDEx1" class="form-control mt-2" name="comment">
+          </div>
+
+          <input type="text" class="d-none" name="month_in" value="">
+          <input type="text" class="d-none" name="day_in" value="">
+
+        </div>
+
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" onclick="return vali_save()">Save</button>
+      </div>
+    </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- 
+<% for(let i =0;i<3;i++){%>
+  <script>
+    console.log("WOW");
+  </script>
+<%}%> -->
 <script>
-    const date = new Date();
-    console.log(date);
+
+  
+
+  // let add  = document.getElementById("mode_add");
+  // let watch  = document.getElementById("mode_watch");
+  // add.classList.remove('d-none');
+  // watch.classList.remove('d-none');
+
+
+  // function mode_add(){
+  //   let add  = document.getElementById("mode_add");
+  //   let watch  = document.getElementById("mode_watch");
+  //   let to_add  = document.getElementById("to_add");
+  //   add.classList.add('d-none');
+  //   watch.classList.add('d-none');
+  //   to_add.classList.remove('d-none');
+  // }
+  
+  function del(id){
+    if( confirm('ยืนยัน') == true){
+        window.location = `/del?id=${id}`
+    }
+    console.log("id : "+id);
+  }
+
+  function genDate(dat,mon){
+    const month = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","พฤษภาคม","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+    let title = document.querySelector("#modal_title")
+    let month_get = document.querySelector("input[name=month_in]").value=parseInt(mon)+1;
+    let day_get = document.querySelector("input[name=day_in]").value=dat;
+    title.innerText ="ลงเวลางาน - "+ dat +"/"+month[mon];
+  }
+
+  function vali_save(){
+    let start = document.querySelector("input[name=start]").value;
+    let stop = document.querySelector("input[name=stop]").value;
+    let comment = document.querySelector("input[name=comment]").value;
+    let month = document.querySelector("input[name=month_in]").value;
+    let day = document.querySelector("input[name=day_in]").value;
+    console.log(start,stop,comment,month,day);
+    if( start == '' || stop == '' ){
+      alert('ใส่ให้เวลาหน่อยจิ');
+      return false ;
+    }else{
+
+      return true;
+    }
+    
+  }
+
 </script>
 
 <%- include("footer") %> 

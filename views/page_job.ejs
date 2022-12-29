@@ -11,8 +11,8 @@
         <div class="calendar">
           <div class="front">
             <div class="current-date">
-              <h1>Friday 15th</h1>
-              <h1>January 2016</h1>	
+              <h1 class=" fs-4">วันที่  <%= parseInt(data.date.getDay) %> </h1>
+              <h1 class=" fs-4">เดือน <%= parseInt(data.date.getMonth)+1 %>   <%=   data.date.getYear %></h1>	
             </div>
   
             <div class="current-month">
@@ -40,16 +40,16 @@
                       <% if(i % 7 == 0){%>
 
                         <div class="first">
-                            <span data-bs-toggle="modal" data-bs-target="#insert" onclick="genDate('<%-show %>','<%-data.date.getMonth %>')"><%= show %> </span>
+                            <span id="sp<%- show %>" data-bs-toggle="modal" data-bs-target="#insert" onclick="genDate('<%-show %>','<%-data.date.getMonth %>')"><%= show %> </span>
                             
                       <%}else if( (i % 7 == 6)){%>
 
-                            <span data-bs-toggle="modal" data-bs-target="#insert" onclick="genDate('<%-show %>','<%-data.date.getMonth %>')"><%= show %> </span>
+                            <span id="sp<%- show %>" data-bs-toggle="modal" data-bs-target="#insert" onclick="genDate('<%-show %>','<%-data.date.getMonth %>')"><%= show %> </span>
                         </div>
 
                       <%}else{%>
 
-                        <span data-bs-toggle="modal" data-bs-target="#insert" onclick="genDate('<%-show %>','<%-data.date.getMonth %>')"><%= show %> </span>
+                        <span id="sp<%- show %>" data-bs-toggle="modal" data-bs-target="#insert" onclick="genDate('<%-show %>','<%-data.date.getMonth %>')"><%= show %> </span>
 
                       <%}%>
                   <% }else{%> 
@@ -123,38 +123,68 @@
     </div>
 
     <div class="container">
+      
       <div class="row mt-5">
         <!-- <div class="col-3"></div> -->
           <div class="col-12">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">วันที่</th>
-                  <th scope="col">เวลาเริ่ม</th>
-                  <th scope="col">เวลาหยุด</th>
-                  <th scope="col">ชั่วโมงที่ได้</th>
-                  <th scope="col">ความคิดเห็น</th>
-                  <th scope="col">ตั้งค่า</th>
-                </tr>
-              </thead>
-              <tbody>
+            <div class="card" >
+              <div class="card-body">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">วันที่</th>
+                    <th scope="col">เวลาเริ่ม</th>
+                    <th scope="col">เวลาหยุด</th>
+                    <th scope="col">ชั่วโมงที่ได้</th>
+                    <th scope="col">ความคิดเห็น</th>
+                    <th scope="col">ตั้งค่า</th>
+                  </tr>
+                </thead>
+                <tbody>
 
-                  <% for(let i of data.userData){%> 
+                    <% for(let i of data.userData){%> 
+                      
+                      <tr>
+                        <th scope="row"><%=i.date %></th>
+                        <td ><%=i.start %></td>
+                        <td ><%=i.stop %></td>
+                        <td ><%=i.time %></td>
+                        <td ><%=i.comment_data %></td>
+                        <td ><button class="btn btn-danger p-1 px-2" onclick="del('<%-i.id%>')">ลบ</button></td>
+                      </tr>
+                    <% } %> 
                     
-                    <tr>
-                      <th scope="row"><%=i.date %></th>
-                      <td ><%=i.start %></td>
-                      <td ><%=i.stop %></td>
-                      <td ><%=i.time %></td>
-                      <td ><%=i.comment_data %></td>
-                      <td ><button class="btn btn-danger p-1 px-2" onclick="del('<%-i.id%>')">ลบ</button></td>
-                    </tr>
-                  <% } %> 
-               
+                
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+            <div class="mt-4">
+              <div class="card" style="width: 18rem;">
+                <div class="card-body btn text-start">
+                  <h5 class="card-title fs-4 fw-bold">สรุป เดือน ..</h5>
+
+                    <table class="table table-borderless">
+                      <tbody>
+                        <tr class=" ">
+                          <td class="">รวมเวลา :</td>
+                          <td colspan="2"><%=data.getAll_time %> ชั่วโมง</td>
+                        </tr>
+                        <tr class="">
+                          <td >รวมเงินที่ได้ :</td>
+                          <td colspan="2"><%=data.getAll_money %> บาท</td>
+                        </tr>
+                      </tbody>
+                    </table>
 
 
-              </tbody>
-            </table>
+                </div>
+              </div>
+              
+            </div>
+
+
           </div>
           
       </div>
@@ -232,12 +262,17 @@
   </div>
 </div>
 
-<!-- 
-<% for(let i =0;i<3;i++){%>
-  <script>
-    console.log("WOW");
-  </script>
-<%}%> -->
+
+<!-- select วันที่เคยลงเวลางานเเล้ว -->
+<% for(let i of data.userData ){%>
+    <script>
+      document.getElementById('sp<%-i.date%>').classList.add("active");
+    </script>
+
+<%}%> 
+
+
+
 <script>
 
   

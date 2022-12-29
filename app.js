@@ -46,9 +46,7 @@ app.get("/",function(req,res){
 /* ----------เวลางาน---------- */
 
 app.get("/job",function(req,res){
-    // console.log();
-    // req.session.user = "HOHO"
-
+     // Have year and month
     if(req.session.user == "" ||req.session.user == undefined ){
         res.redirect('/');
     }else{
@@ -63,6 +61,7 @@ app.get("/job",function(req,res){
             return days;
         }
         const date = new Date();
+        // let date_current = getDaysInMonth(date.getMonth(),date.getFullYear())
         let date_current = getDaysInMonth(date.getMonth(),date.getFullYear())
 
         let data = {
@@ -76,11 +75,43 @@ app.get("/job",function(req,res){
                 user:req.session.user || ''
             }
         }
-        let sql = "SELECT * FROM data where data.user_id = "+req.session.user_id;
+        let sql = `SELECT * FROM data where data.user_id = ${req.session.user_id} and data.real_date LIKE '%2022-12%' ORDER BY data.date`;
+        // let sql = `SELECT * FROM data where data.user_id = ${req.session.user_id} order BY data.date`;
+        
         con.query(sql,function(err,result){
             if(!err){
+                let h = 0;
+                let m = 0;
+                let allTime = 0;
+                let allMoney = 0;
                 data["userData"]=result;
-                // console.log("dfd",data.userData);
+                // cal - all time
+                for(let i of result){
+                    /* getTime[0] = h */
+                    /* getTime[1] = m */
+                    let getTime = i.time.split(":");
+                    h+= parseInt(getTime[0]);
+                    m+= parseInt(getTime[1]);
+                    
+                }
+                let s = (h*60) + m;
+                h = parseInt(s/60);
+                m = s % 60;
+                let all = "";
+                if(h<10){
+                    all += `0${h}`;
+                }else{
+                    all += `${h}`;
+                }
+                all+=":";
+                if(m<10){
+                    all += `0${m}`;
+                }else{
+                    all += `${m}`;
+                }
+                data["getAll_time"]=all;
+                data["getAll_money"]=h*50;
+
                 res.render('page_job',{data:data});
             }
         })
@@ -110,7 +141,20 @@ function cal_time(start,stop){
         h = parseInt(s/60)
         m = s % 60
     }
-    return h+":"+m;
+    let result = "";
+    if(h<10){
+        result += `0${h}`;
+    }else{
+        result += `${h}`;
+    }
+    result+=":";
+    if(m<10){
+        result += `0${m}`;
+    }else{
+        result += `${m}`;
+    }
+
+    return result;
 }
 app.get("/del",function(req,res){
     let id = req.query.id;
@@ -126,12 +170,13 @@ app.get("/del",function(req,res){
 });
 
 app.post('/save_time',function(req,res){
+    // Have year and month
     let start = req.body.start;
     let stop = req.body.stop;
     let comment =req.body.comment;
     let month = req.body.month_in;
     let day =req.body.day_in ;
-    let time = cal_time(start,stop);//2022-12-29
+    let time = cal_time(start,stop);
     let date = "2022-"+month+"-"+day;
     sql = ` INSERT INTO data(user_id, start, stop,time,real_date,comment_data,date) VALUES 
     ('${req.session.user_id}' , '${start}' , '${stop}', '${time}', '${date}', '${comment}', '${day}') `;

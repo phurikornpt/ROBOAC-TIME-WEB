@@ -1,11 +1,14 @@
 * {
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Noto Sans Thai', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
   list-style: none;
   margin: 0;
   outline: none;
   padding: 0;
 }
+
+
 
 
 
@@ -89,8 +92,8 @@
 }
 
 .weeks span.active {
-	background: #c67d49;
-	border-radius: 80%;
+	background: #59e989;
+	border-radius: 50%;
 }
 
 .weeks span:not(.last-month):hover {

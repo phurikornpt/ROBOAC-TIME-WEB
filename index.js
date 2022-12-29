@@ -1,8 +1,22 @@
 const express = require('express');
 const body = require('body-parser');
 const session =require('express-session')
-const mysql = require('mysql');
 const app = express();
+
+const {Client} = require('pg');
+
+// const con = new Client({
+//     host: "localhost",
+//     user: "postgres",
+//     port:5432,
+//     password: "phu16821",
+//     database: "roboac"
+// });
+// con.connect();
+// con.query('select * from user',function(err,res){
+//     console.log(res);
+// })
+// const mysql = require('mysql');
 
 
 
@@ -17,16 +31,16 @@ app.use(body.urlencoded({extended:true}));
 app.set('view engine','ejs');
 
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "roboac"
-});
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
+// var con = mysql.createConnection({
+//     host: "localhost",
+//     user: "root",
+//     password: "",
+//     database: "roboac"
+// });
+// con.connect(function(err) {
+//     if (err) throw err;
+//     console.log("Connected!");
+// });
 
 
 app.get("/",function(req,res){

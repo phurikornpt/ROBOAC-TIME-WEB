@@ -2,79 +2,18 @@
 <%- include("header") %> 
 
 
-<!-- test -->
-
-
-<!-- <div class="row d-grid justify-content-center">
-    <div class="col-6">
-        <label for="">start</label><input type="time" name="start" id="">
-    </div>
-    <div class="col-6">
-        <label for="">stop</label><input type="time" name="stop" id="">
-    </div>
-    <button class="btn btn-secondary mt-5" onclick="calTime()">Cal</button>
-
-</div>
-<p id="time" class="text-center"></p>
-
-<script>
-    function calTime(){
-        let start = document.querySelector("input[name=start]");
-        let stop = document.querySelector("input[name=stop]");
-        start = start.value
-        stop = stop.value
-
-        let start_h = Number(start.substring(0,2));
-        let start_m = Number(start.substring(3,start.length));
-        let stop_h = Number(stop.substring(0,2));
-        let stop_m = Number(stop.substring(3,stop.length));
-
-        let h =0;
-        let m =0;
-
-        if(start_h <= stop_h){
-            let m1 = (start_h * 60) + start_m;
-            let m2 = (stop_h * 60) + stop_m;
-            let dis = m2 - m1;
-            h = parseInt(dis/60);
-            m = dis % 60;
-
-        }else{
-            let midni_m = (24*60) - ( (start_h*60) +start_m )
-            let m2 =(stop_h * 60) + stop_m
-            let s = midni_m + m2
-            h = parseInt(s/60)
-            m = s % 60
-        }
-
-        document.getElementById("time").innerText="H : "+h+" M :"+m;
-        console.log(start);
-        console.log(stop);
-
-
-    }
-
-
-</script> -->
-
-
-
-
-
-
-<!-- test -->
-
-
     <% if (data.session.user != ''){%>
 
-        <div class="container">
-            <h1 id="user" class="text-center"></h1>
+        <div class="container " >
+
+            <h1 id="user" class="text-center fs-1 fw-bold mt-5"></h1>
+
             <div class="justify-content-center d-grid mt-5 p-5" >
 
                 <form id ="job" action="/job" method="get">
-                    <div class="card btn bg-info-subtle bg-opacity-10"  style="width: 18rem;" onclick="job()">
-                        <div class="card-body  " >
-                            <h5 class="card-title ">ลงเวลางาน</h5>
+                    <div class="card  mb-1"   onclick="job()">
+                        <div class="card-body btn btn-dark " >
+                            <h5 class="card-title fs-3 text-light">ลงเวลางาน</h5>
                         </div>
                     </div>
                 </form>
@@ -82,7 +21,7 @@
                 <form id="myform" action="/logout" method="post" class="d-grid justify-content-center">
                 <div class="card btn" onclick="logout_on()" style="width: 18rem;">
                     <div class="card-body  " >
-                        <h5 id="logout" class="card-title "></h5>
+                        <h5 id="logout" class="card-title fs-3 fw-bold "></h5>
                     </div>
                 </div>
                 </form>
@@ -126,17 +65,17 @@
         
     <% }else{%>
 
-        <div class="container">
+        <div class="container" >
             <div class="justify-content-center d-grid mt-5 p-5" >
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body btn " data-bs-toggle="modal" data-bs-target="#login_page">
-                    <h5 id="login" class="card-title text-center"></h5>
+                <div class="card mb-1 " style="width: 18rem;">
+                    <div class="card-body btn btn-white " data-bs-toggle="modal" data-bs-target="#login_page" onclick="login_page()">
+                    <h5 id="login" class="card-title text-center fs-3 "></h5>
     
                     </div>
                 </div>
                 <div class="card" >
-                    <div class="card-body btn " data-bs-toggle="modal" data-bs-target="#register_page">
-                    <h5 id="register" class="card-title text-center"></h5>
+                    <div class="card-body btn btn-dark " data-bs-toggle="modal" data-bs-target="#register_page" onclick="register_page()">
+                    <h5 id="register" class="card-title text-center text-light fs-3 "></h5>
     
                     </div>
                 </div>
@@ -253,6 +192,21 @@
     function logout_on(){
         document.getElementById("myform").submit();
     }
+
+    function login_page(){
+        let user = document.querySelector("input[name=user]").value = "";
+        let pass = document.querySelector("input[name=pass]").value = "";
+        alert_login.classList.add('d-none');
+    }
+    function register_page(){
+        let name = document.querySelector("input[name=name_reg]").value = "";
+        let user = document.querySelector("input[name=user_reg]").value = "";
+        let pass = document.querySelector("input[name=pass_reg]").value = "";
+        alert_username.classList.add('d-none');
+        alert_name.classList.add('d-none');
+        alert_done.classList.add('d-none');
+    }
+
     function val_register(){
         let name = document.querySelector("input[name=name_reg]").value;
         let user = document.querySelector("input[name=user_reg]").value;

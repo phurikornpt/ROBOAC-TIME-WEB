@@ -4,27 +4,14 @@
 <!-- <h1><%= data.date.getFullMonth.length %></h1> -->
 
 <div class="container-fluid">
-
-  
-  
     <div class="containertt">
         <div class="calendar">
           <div class="front">
             <div class="current-date">
-              <h1 class=" fs-4">วันที่  <%= parseInt(data.date.getDay) %> </h1>
-              <h1 class=" fs-4">เดือน <%= parseInt(data.date.getMonth)+1 %>   <%=   data.date.getYear %></h1>	
+              <h1 class=" fs-4  ">วันที่  <%= parseInt(data.date.getDay) %> </h1>
+              <h1 id="showMonth" class=" fs-4 "><%=data.date.getNameMonth%> <%=data.date.getYear%></h1>	
             </div>
-  
             <div class="current-month">
-              <!-- <ul class="week-days">
-                <li>MON</li>
-                <li>TUE</li>
-                <li>WED</li>
-                <li>THU</li>
-                <li>FRI</li>
-                <li>SAT</li>
-                <li>SUN</li>
-              </ul> -->
             <div class="weeks">
 
               <% for(let i =0;i<35;i++){%>
@@ -59,59 +46,7 @@
               <%}%> 
             </div>    
               
-              <!-- <div class="weeks">
-                <div class="first">
-                  <span class="last-month">28</span>
-                  <span class="last-month">29</span>
-                  <span class="last-month">30</span>
-                  <span class="last-month">31</span>
-                  <span>01</span>
-                  <span>02</span>
-                  <span>03</span>
-                </div>
-  
-                <div class="second">
-                  <span>04</span>
-                  <span>05</span>
-                  <span class="event">06</span>
-                  <span>07</span>
-                  <span>08</span>
-                  <span>09</span>
-                  <span>10</span>
-                </div>
-  
-                <div class="third">
-                  <span>11</span>
-                  <span>12</span>
-                  <span>13</span>
-                  <span>14</span>
-                  <span class="active">15</span>
-                  <span>16</span>
-                  <span>17</span>
-                </div>
-  
-                <div class="fourth">
-                  <span>18</span>
-                  <span>19</span>
-                  <span>20</span>
-                  <span>21</span>
-                  <span>22</span>
-                  <span>23</span>
-                  <span>24</span>
-                </div>
-  
-                <div class="fifth">
-                  <span>25</span>
-                  <span>26</span>
-                  <span>27</span>
-                  <span>28</span>
-                  <span>29</span>
-                  <span>30</span>
-                  <span>31</span>
-                </div> -->
-
-              <!-- </div> -->
-            <!-- </div> -->
+              
           </div>
   
           
@@ -161,27 +96,38 @@
           </div>
 
             <div class="mt-4">
-              <div class="card" style="width: 18rem;">
-                <div class="card-body btn text-start">
-                  <h5 class="card-title fs-4 fw-bold">สรุป เดือน ..</h5>
 
-                    <table class="table table-borderless">
-                      <tbody>
-                        <tr class=" ">
-                          <td class="">รวมเวลา :</td>
-                          <td colspan="2"><%=data.getAll_time %> ชั่วโมง</td>
-                        </tr>
-                        <tr class="">
-                          <td >รวมเงินที่ได้ :</td>
-                          <td colspan="2"><%=data.getAll_money %> บาท</td>
-                        </tr>
-                      </tbody>
-                    </table>
+              <div class="row">
+
+                <div class="col-4" >
+                  <div class="card" style="width: 18rem;">
+                    <div class="card-body btn text-start">
+                      <h5 class="card-title fs-4 fw-bold d-inline"><%=data.session.user %> </h5>
+                      <h5 id="summary" class="card-title fs-4 fw-bold d-inline float-end"><%=data.date.getNameMonth%> <%=data.date.getYear%> </h5>
+
+                        <table class="table table-borderless">
+                          <tbody>
+                            <tr class=" ">
+                              <td class="">รวมเวลา :</td>
+                              <td colspan="2"><%=data.getAll_time %> ชั่วโมง</td>
+                            </tr>
+                            <tr class="">
+                              <td >รวมเงินที่ได้ :</td>
+                              <td colspan="2"><%=data.getAll_money %> บาท</td>
+                            </tr>
+                          </tbody>
+                        </table>
 
 
+                    </div>
+                  </div>
                 </div>
+              
+                
+                
               </div>
               
+
             </div>
 
 
@@ -201,25 +147,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-
-        <!-- <div class="row" id="select_mode">
-          
-            <div class="col-6" id="mode_add" onclick="mode_add()">
-                <div class="card btn">
-                  <div class="card-body">
-                    ลงเวลางาน
-                  </div>
-                </div>
-            </div>
-            <div class="col-6" id="mode_watch">
-              <div class="card btn" onclick="mode_watch()">
-                <div class="card-body">
-                  ดูเวลางาน
-                </div>
-              </div>
-            </div>
-
-        </div> -->
         <form action="/save_time" method="post">
 
         <div id="to_add" class="mb-3 row text-center ">
@@ -276,22 +203,6 @@
 <script>
 
   
-
-  // let add  = document.getElementById("mode_add");
-  // let watch  = document.getElementById("mode_watch");
-  // add.classList.remove('d-none');
-  // watch.classList.remove('d-none');
-
-
-  // function mode_add(){
-  //   let add  = document.getElementById("mode_add");
-  //   let watch  = document.getElementById("mode_watch");
-  //   let to_add  = document.getElementById("to_add");
-  //   add.classList.add('d-none');
-  //   watch.classList.add('d-none');
-  //   to_add.classList.remove('d-none');
-  // }
-  
   function del(id){
     if( confirm('ยืนยัน') == true){
         window.location = `/del?id=${id}`
@@ -300,11 +211,16 @@
   }
 
   function genDate(dat,mon){
+    let start = document.querySelector("input[name=start]").value="";
+    let stop = document.querySelector("input[name=stop]").value="";
+    let comment = document.querySelector("input[name=comment]").value="";
+
     const month = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","พฤษภาคม","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
     let title = document.querySelector("#modal_title")
     let month_get = document.querySelector("input[name=month_in]").value=parseInt(mon)+1;
     let day_get = document.querySelector("input[name=day_in]").value=dat;
-    title.innerText ="ลงเวลางาน - "+ dat +"/"+month[mon];
+
+    title.innerText ="ลงเวลางาน - "+ dat +" "+month[mon];
   }
 
   function vali_save(){

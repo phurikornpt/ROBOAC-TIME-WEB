@@ -28,46 +28,64 @@ con.connect(function(err) {
     console.log("Connected!");
 });
 
+
 app.get("/",function(req,res){
+
+    
     // for test UI
     // console.log(req.session.user_id);
-    req.session.user = "admin";
-    req.session.user_id = 11;
+    // req.session.user = "admin";
+    // req.session.user_id = 11;
 
     let data = {
         session:{
             user:req.session.user || ''
         }
     }
+
+
     res.render('page',{data:data});
 })
 
 
 /* ----------เวลางาน---------- */
+var date = new Date();
 
 app.get("/job",function(req,res){
-     // Have year and month
-    if(req.session.user == "" ||req.session.user == undefined ){
+     // Have year and month - ---------------------------------------------------------------------------
+    
+     const MONTH = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","พฤษภาคม","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+     if(req.session.user == "" ||req.session.user == undefined ){
         res.redirect('/');
     }else{
 
         function getDaysInMonth(month, year) {
-            var date = new Date(year, month, 1);
-            var days = [];
-            while (date.getMonth() === month) {
-            days.push(new Date(date));
-            date.setDate(date.getDate() + 1);
+            let dateT = new Date(year, month, 1);
+            let days = [];
+            while (dateT.getMonth() === month) {
+            days.push(new Date(dateT));
+            dateT.setDate(dateT.getDate() + 1);
             }
             return days;
         }
-        const date = new Date();
-        // let date_current = getDaysInMonth(date.getMonth(),date.getFullYear())
+
+        
+
+        
+
+        let now_time = `${date.getFullYear()}-${date.getMonth()+1}`;
+        let array_time = now_time.split("-");
+
         let date_current = getDaysInMonth(date.getMonth(),date.getFullYear())
+        // let date_current = getDaysInMonth(10,date.getFullYear())
+
+        
 
         let data = {
             date:{
                 getDay:date.getDate(),
                 getMonth:date.getMonth(),
+                getNameMonth:MONTH[date.getMonth()],
                 getFullMonth:date_current,
                 getYear:date.getFullYear()
             },
@@ -75,7 +93,9 @@ app.get("/job",function(req,res){
                 user:req.session.user || ''
             }
         }
-        let sql = `SELECT * FROM data where data.user_id = ${req.session.user_id} and data.real_date LIKE '%2022-12%' ORDER BY data.date`;
+        
+
+        let sql = `SELECT * FROM data where data.user_id = ${req.session.user_id} and data.real_date LIKE '%${now_time}%' ORDER BY data.date`;
         // let sql = `SELECT * FROM data where data.user_id = ${req.session.user_id} order BY data.date`;
         
         con.query(sql,function(err,result){
@@ -170,16 +190,17 @@ app.get("/del",function(req,res){
 });
 
 app.post('/save_time',function(req,res){
-    // Have year and month
+    // Have year and month - ---------------------------------------------------------------------------
     let start = req.body.start;
     let stop = req.body.stop;
     let comment =req.body.comment;
     let month = req.body.month_in;
     let day =req.body.day_in ;
     let time = cal_time(start,stop);
-    let date = "2022-"+month+"-"+day;
+
+    let date_year = date.getFullYear()+"-"+month+"-"+day;
     sql = ` INSERT INTO data(user_id, start, stop,time,real_date,comment_data,date) VALUES 
-    ('${req.session.user_id}' , '${start}' , '${stop}', '${time}', '${date}', '${comment}', '${day}') `;
+    ('${req.session.user_id}' , '${start}' , '${stop}', '${time}', '${date_year}', '${comment}', '${day}') `;
     // sql = ` INSERT INTO data(user_id, start, stop,time,real_date,comment_data,date) VALUES 
     // ('"+req.session.user_id+"' , '"+start+"' , '"+stop+"', '"+time+"', '"+date+"', '"+comment+"', '"+day+"')`;
     con.query(sql,function(err,result){
@@ -209,7 +230,7 @@ app.post("/login",function(req,res){
             result.forEach(element => {
                 if(user == element.username && pass == element.password ){
                     // console.log(element);
-                    req.session.user= element.name ;
+                    req.session.user= element.name;
                     req.session.user_id= element.user_id ;
 
                     res.send({status:1});

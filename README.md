@@ -1,4 +1,5 @@
-# ROBOAC-TIME-WEB
+# เว็บสำหรับลงเวลางาน ใช้สำหรับภายในทีม
+
 
 Login page
 ![login](https://user-images.githubusercontent.com/64789513/210043046-d99c345e-d91e-4329-980c-2b443090322c.jpg)
@@ -12,3 +13,15 @@ log time
 summary in log time
 
 ![summary](https://user-images.githubusercontent.com/64789513/210043195-d1c0549f-dc96-49c9-b0c4-fd464783b3d3.jpg)
+
+
+
+fontend 
+->html css js
+->bootstrap
+
+backend 
+->nodejs
+
+database
+->postgresql

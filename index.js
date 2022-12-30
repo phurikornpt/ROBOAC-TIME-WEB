@@ -5,6 +5,13 @@ const app = express();
 
 const {Client} = require('pg');
 
+// const con = new Client({
+//     host: "localhost",
+//     user: "postgres",
+//     port:5432,
+//     password: "phu16821",
+//     database: "postgres"
+// });
 const con = new Client({
     host: "dpg-cen495ta4991ihmotel0-a",
     user: "phurikorn",
@@ -13,13 +20,14 @@ const con = new Client({
     database: "roboac_2n3v"
 });
 con.connect();
-con.query('select * from data',function(err,res){
-    for(let i of res.rows){
-        console.log(i);
-    }
+// con.query('select * from data',function(err,res){
+//     for(let i of res.rows){
+//         console.log(i);
+//     }
 
-})
+// })
 // const mysql = require('mysql');
+
 
 
 
@@ -112,18 +120,20 @@ app.get("/job",function(req,res){
         }
         
 
-        let sql = `SELECT * FROM data where data.user_id = ${req.session.user_id} and data.real_date LIKE '%${now_time}%' ORDER BY data.date`;
+        let sql = `SELECT * FROM public.data where data.user_id = ${req.session.user_id} and data.real_date LIKE '%${now_time}%' ORDER BY data.date`;
         // let sql = `SELECT * FROM data where data.user_id = ${req.session.user_id} order BY data.date`;
         
         con.query(sql,function(err,result){
+            
             if(!err){
                 let h = 0;
                 let m = 0;
                 let allTime = 0;
                 let allMoney = 0;
-                data["userData"]=result;
+                data["userData"]=result.rows || [];
                 // cal - all time
-                for(let i of result){
+                // console.log(result);
+                for(let i of result.rows){
                     /* getTime[0] = h */
                     /* getTime[1] = m */
                     let getTime = i.time.split(":");
@@ -148,7 +158,6 @@ app.get("/job",function(req,res){
                 }
                 data["getAll_time"]=all;
                 data["getAll_money"]=h*50;
-
                 res.render('page_job',{data:data});
             }
         })
@@ -195,7 +204,7 @@ function cal_time(start,stop){
 }
 app.get("/del",function(req,res){
     let id = req.query.id;
-    let sql =`DELETE FROM data WHERE data.id = ${parseInt(id)}`;
+    let sql =`DELETE FROM public.data WHERE data.id = ${parseInt(id)}`;
     con.query(sql,function(err){
         if(!err){
             console.log("DONE Remove id :"+id);
@@ -216,17 +225,16 @@ app.post('/save_time',function(req,res){
     let time = cal_time(start,stop);
 
     let date_year = date.getFullYear()+"-"+month+"-"+day;
-    sql = ` INSERT INTO data(user_id, start, stop,time,real_date,comment_data,date) VALUES 
+    sql = ` INSERT INTO public.data(user_id, start, stop,time,real_date,comment_data,date) VALUES 
     ('${req.session.user_id}' , '${start}' , '${stop}', '${time}', '${date_year}', '${comment}', '${day}') `;
     // sql = ` INSERT INTO data(user_id, start, stop,time,real_date,comment_data,date) VALUES 
     // ('"+req.session.user_id+"' , '"+start+"' , '"+stop+"', '"+time+"', '"+date+"', '"+comment+"', '"+day+"')`;
-    con.query(sql,function(err,result){
+    con.query(sql,function(err){
         if(!err){
             console.log("DONE");
             res.redirect('/job');
         }
     })
-    // console.log(start,stop,comment,month,day);
 
 
 });
@@ -239,17 +247,13 @@ app.post('/save_time',function(req,res){
 app.post("/login",function(req,res){
     let user = req.body.user;
     let pass = req.body.pass;
-    let sql = "SELECT * FROM user";
-    // con.query('select * from data',function(err,res){
-    //     for(let i of res.rows){
-    //         console.log(i);
-    //     }
-    
-    // })
+    let sql = "SELECT  * from public.user ";
+
     con.query(sql,function(err,result){
         let isMatch = false;
         if(!err){
             result.rows.forEach(element => {
+                console.log(element);
                 if(user == element.username && pass == element.password ){
                     // console.log(element);
                     req.session.user= element.name;
@@ -272,13 +276,14 @@ app.post("/register",function(req,res){
     let name = req.body.name;
     let user = req.body.user;
     let pass = req.body.pass;
-    let sql = "SELECT name,username FROM user";
+    let sql = "SELECT name,username FROM public.user";
     let isMatch = false;
     con.query(sql,function(err,result){
+
         if(!err){
             
-            for(let element of result){
-                // console.log(element);
+            for(let element of result.rows){
+                console.log(element);
                 if(user == element.username){
                     res.send({status:"username"});
                     isMatch = true;
@@ -290,8 +295,9 @@ app.post("/register",function(req,res){
                 }
             }
             if( isMatch == false ){
-                sql = "INSERT INTO user(name, username, password) VALUES ('"+name+"' , '"+user+"' , '"+pass+"')";
-                con.query(sql,function(err,result){
+                sql = "INSERT INTO public.user( name , username, password,role) VALUES ('"+name+"' , '"+user+"' , '"+pass+"','u')";
+                con.query(sql,function(err){
+                    console.log(err);
                     if(!err){
                         console.log("DONE");
                         res.send({status:"done"});
@@ -309,6 +315,7 @@ app.post("/register",function(req,res){
 app.post("/logout",function(req,res){
 
     req.session.user =undefined;
+    req.session.user_id =undefined;
     res.redirect('/')
 })
 

@@ -13,12 +13,12 @@ const con = new Client({
     database: "roboac_2n3v"
 });
 con.connect();
-// con.query('select * from data',function(err,res){
-//     for(let i of res.rows){
-//         console.log(i);
-//     }
+con.query('select * from data',function(err,res){
+    for(let i of res.rows){
+        console.log(i);
+    }
 
-// })
+})
 // const mysql = require('mysql');
 
 

@@ -240,11 +240,16 @@ app.post("/login",function(req,res){
     let user = req.body.user;
     let pass = req.body.pass;
     let sql = "SELECT * FROM user";
+    // con.query('select * from data',function(err,res){
+    //     for(let i of res.rows){
+    //         console.log(i);
+    //     }
     
+    // })
     con.query(sql,function(err,result){
         let isMatch = false;
         if(!err){
-            result.forEach(element => {
+            result.rows.forEach(element => {
                 if(user == element.username && pass == element.password ){
                     // console.log(element);
                     req.session.user= element.name;
@@ -257,6 +262,8 @@ app.post("/login",function(req,res){
             if ( isMatch == false){
                 res.send({status:0});
             }
+        }else{
+            res.send({status:5});
         }
     })
 })

@@ -4,22 +4,22 @@ const session =require('express-session')
 const app = express();
 
 const {Client} = require('pg');
-
-// const con = new Client({
-//     host: "localhost",
-//     user: "postgres",
-//     port:5432,
-//     password: "phu16821",
-//     database: "postgres"
-// });
 const con = new Client({
-    host: "dpg-cen495ta4991ihmotel0-a",
-    user: "phurikorn",
+    host: "localhost",
+    user: "postgres",
     port:5432,
-    password: "BYrxbWhK9VaauuiEdwIxOloZI4rQHHHd",
-    database: "roboac_2n3v"
+    password: "phu16821",
+    database: "postgres"
 });
+// const con = new Client({
+//     host: "dpg-cen495ta4991ihmotel0-a",
+//     user: "phurikorn",
+//     port:5432,
+//     password: "BYrxbWhK9VaauuiEdwIxOloZI4rQHHHd",
+//     database: "roboac_2n3v"
+// });
 con.connect();
+
 // con.query('select * from data',function(err,res){
 //     for(let i of res.rows){
 //         console.log(i);
@@ -173,7 +173,8 @@ function cal_time(start,stop){
     let h =0;
     let m =0;
 
-    if(start_h <= stop_h){
+    let condition  = ((start_h*60)+start_m) <= ((stop_h*60)+stop_m);
+    if( condition ){
         let m1 = (start_h * 60) + start_m;
         let m2 = (stop_h * 60) + stop_m;
         let dis = m2 - m1;
@@ -225,6 +226,7 @@ app.post('/save_time',function(req,res){
     let time = cal_time(start,stop);
 
     let date_year = date.getFullYear()+"-"+month+"-"+day;
+    console.log(day);
     sql = ` INSERT INTO public.data(user_id, start, stop,time,real_date,comment_data,date) VALUES 
     ('${req.session.user_id}' , '${start}' , '${stop}', '${time}', '${date_year}', '${comment}', '${day}') `;
     // sql = ` INSERT INTO data(user_id, start, stop,time,real_date,comment_data,date) VALUES 

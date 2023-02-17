@@ -124,7 +124,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert  alert-danger" id="alert_login">รหัสไม่ถูกต้อง</div>
-                <!-- <form action="/login" method="post"> -->
+                <form  onsubmit="return val_login()">
                         <div class="mb-3">
                           <label for="exampleInputEmail1" class="form-label">Username</label>
                           <input type="text" class="form-control"   name ="user">
@@ -134,8 +134,8 @@
                           <input type="password" class="form-control" name ="pass">
                         </div>
                         
-                        <button type="submit" class="btn btn-primary float-end" onclick="val_login()">Submit</button>
-                <!-- </form> -->
+                        <button type="submit" class="btn btn-primary float-end" onclick="">Submit</button>
+                </form>
             </div>
      
         </div>
@@ -153,7 +153,7 @@
                 <div class="alert  alert-danger" id="alert_username">มี Username นี้อยู่เเล้ว</div>
                 <div class="alert  alert-danger" id="alert_name">มีชื่อนี้อยู่เเล้ว</div>
                 <div class="alert  alert-success" id="alert_done">สมัครสมาชิกเรียบร้อย</div>
-                <!-- <form action="/register" method="post"> -->
+                <form  onsubmit="val_register()">
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Name (ภาษาไทย)</label>
                             <input type="text" class="form-control"   name ="name_reg" placeholder="ต้นข้าว เป็นต้น">
@@ -167,8 +167,8 @@
                           <input type="password" class="form-control" name ="pass_reg">
                         </div>
                         
-                        <button type="submit" class="btn btn-primary float-end" onclick = "val_register()" id="regis_btn">Submit</button>
-                <!-- </form> -->
+                        <button type="submit" class="btn btn-primary float-end" onclick = "" id="regis_btn">Submit</button>
+                </form>
             </div>
      
         </div>
@@ -239,6 +239,7 @@
 
                 })
         }
+        return false;
     }
     function val_login(){
         let user = document.querySelector("input[name=user]").value;
@@ -263,6 +264,7 @@
 
                 })
         }
+        return false;
     }
 
     function job(){

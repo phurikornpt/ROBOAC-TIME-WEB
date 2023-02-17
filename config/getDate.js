@@ -14,7 +14,7 @@ exports.date = function (){
     if (minutes < 10) {
         minutes = "0" + minutes;
     }
-    return month+"/"+day+"/"+year;
+    return day+ "/" + month + "/" + year;
 }
 exports.currentTime =function (){
     const date = new Date();

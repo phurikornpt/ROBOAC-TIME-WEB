@@ -1,6 +1,7 @@
 
 const con = require('../config/db_config');
 const cal_time = require('../config/cat_time');
+const getDate = require('../config/getDate');
 var date = new Date();
 
 
@@ -163,7 +164,10 @@ exports.job = (req, res) => {
                getMonth:date.getMonth(),
                getNameMonth:MONTH[date.getMonth()],
                getFullMonth:date_current,
-               getYear:date.getFullYear()
+               getYear:date.getFullYear(),
+               getDate:getDate.date(),
+               getTime:getDate.currentTime(),
+
            },
            session:{
                user:req.session.user || ''

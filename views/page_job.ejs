@@ -1,7 +1,6 @@
 
 <%- include("header") %> 
 
-<!-- <h1><%= data.date.getFullMonth.length %></h1> -->
 
 <div class="container-fluid">
     <div class="containertt">
@@ -64,7 +63,7 @@
           <div class="col-12">
             <div class="card" >
               <div class="card-body">
-              <table class="table table-hover">
+              <table id="emp" class="table table-hover display">
                 <thead>
                   <tr>
                     <th scope="col">วันที่</th>
@@ -102,18 +101,18 @@
         <div class="mt-4 col-4">
           <div class="card" style="width: 18rem;">
             <div class="card-body btn text-start">
-              <h5 class="card-title fs-4 fw-bold d-inline"><%=data.session.user %> </h5>
+              <h5 class="card-title fs-4 fw-bold d-inline"><%= data.session.user %> </h5>
               <h5 id="summary" class="card-title fs-4 fw-bold d-inline float-end"><%=data.date.getNameMonth%> <%=data.date.getYear%> </h5>
   
                 <table class="table table-borderless">
                   <tbody>
                     <tr class=" ">
                       <td class="">รวมเวลา :</td>
-                      <td colspan="2"><%=data.getAll_time %> ชั่วโมง</td>
+                      <td colspan="2"><%= data.getAll_time %> ชั่วโมง</td>
                     </tr>
                     <tr class="">
                       <td >รวมเงินที่ได้ :</td>
-                      <td colspan="2"><%=data.getAll_money %> บาท</td>
+                      <td colspan="2"><%= data.getAll_money %> บาท</td>
                     </tr>
                   </tbody>
                 </table>
@@ -195,15 +194,59 @@
 <%}%> 
 
 
-
 <script>
+  $(document).ready( function () {
+    $('#emp').DataTable({
+                "paging": false,
+                "searching": false,
+                "ordering": false,
+                "info": false,
+                "autoWidth": false,
+                "responsive": true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                    extend: 'print',
+                    messageTop:
+                    `
+                        <p style='text-align: right;'>ออกรายงานวันที่ <%=data.date.getDate%> เวลา <%=data.date.getTime%> </p>
+                        <div style="text-align: center;">
+                            <img src="images/logo.jpg" width="100px" height="100px"  >
+                        </div><br>
+                        <h2 style='text-align: center;'>รายงานเวลาการทำงาน</h2>
+                        <table style="float:right">
+                            <tr><td></td><td></td><td></td></tr>
+                            <tbody>
+                                <tr>
+                                    <td class="text-bold">รายงานของ </td>
+                                    <td> :   <b><%=data.session.user%></b>  </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-bold">รวมเวลา </td>
+                                    <td> : <%=data.getAll_time%>  ชั่วโมง </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-bold">รวมเงินที่ได้ </td>
+                                    <td> : <%=data.getAll_money%>  บาท </td>
+                                </tr>
+                    
+                            </tbody>
+                        </table>
+                    `,
 
+                    messageBottom: 
+                    `   
+                    `
+                    }
+                ]
+            });
+} );
   
   function del(id){
     if( confirm('ยืนยัน') == true){
         window.location = `/del?id=${id}`
     }
-    console.log("id : "+id);
+    // console.log("id : "+id);
   }
 
   function genDate(dat,mon){

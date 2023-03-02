@@ -21,7 +21,6 @@ app.use(session({
 const routes = require('./routes/route');
 
 app.use('/',routes);
-
 let port = process.env.PORT;
 if (port ==null || port ==""){
     port = 3000;

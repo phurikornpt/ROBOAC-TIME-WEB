@@ -1,0 +1,191 @@
+<%- include("header") %> 
+<div class="container">
+
+    <p class="text-center fs-2 ">ออกรายงานการทำงาน</p>
+    
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <form  onsubmit="return vali_month()" action="oldtime" method="get">
+                <div class="card card-body">
+                    <label for=""  >Select Month</label>
+                    <input type="month" class="form-control my-2" name="month" id="">
+                    <button type="submit" class="btn btn-success">
+                        ยืนยัน
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-2"></div>
+
+    </div>  
+
+
+</div>
+
+
+<script>
+    function vali_month(){
+        let m = document.querySelector("input[name=month]").value
+        if( m == undefined || m == ""){
+            alert("กรุณาใส่เดือน")
+            return false;
+        }else{
+            return true;
+        }
+    }
+</script>
+
+<% if(locals.data.date){%>
+
+    <script>
+        console.log("WOW");
+        let m = document.querySelector("input[name=month]")
+        m.value = "<%= data.date.getNow%>"
+    </script>
+
+
+
+    <div class="container">
+        <div class="row mt-5">
+          <!-- <div class="col-3"></div> -->
+            <div class="col-12">
+              <div class="card" >
+                <div class="card-body">
+                <table id="emp" class="table table-hover display">
+                  <thead>
+                    <tr>
+                      <th scope="col">วันที่</th>
+                      <th scope="col">เวลาเริ่ม</th>
+                      <th scope="col">เวลาหยุด</th>
+                      <th scope="col">ชั่วโมงที่ได้</th>
+                      <th scope="col">ความคิดเห็น</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+    
+                      <% for(let i of data.userData){%> 
+                        
+                        <tr>
+                          <th scope="row"><%=i.date %></th>
+                          <td ><%=i.start %></td>
+                          <td ><%=i.stop %></td>
+                          <td ><%=i.time %></td>
+                          <td ><%=i.comment_data %></td>
+                        </tr>
+                      <% } %> 
+                      
+                  
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+    
+        <div class="row">
+    
+    
+          <div class="mt-4 col-4">
+            <div class="card" style="width: 18rem;">
+              <div class="card-body btn text-start">
+                <h5 class="card-title fs-4 fw-bold d-inline"><%= data.session.user %> </h5>
+                <h5 id="summary" class="card-title fs-4 fw-bold d-inline float-end"><%=data.date.getNameMonth%> <%=data.date.getNow%> </h5>
+    
+                  <table class="table table-borderless">
+                    <tbody>
+                      <tr class=" ">
+                        <td class="">รวมเวลา :</td>
+                        <td colspan="2"><%= data.getAll_time %> ชั่วโมง</td>
+                      </tr>
+                      <tr class="">
+                        <td >รวมเงินที่ได้ :</td>
+                        <td colspan="2"><%= data.getAll_money %> บาท</td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+          
+            
+    </div>
+    <script>
+        $(document).ready( function () {
+          $('#emp').DataTable({
+                      "paging": false,
+                      "searching": false,
+                      "ordering": false,
+                      "info": false,
+                      "autoWidth": false,
+                      "responsive": true,
+                      dom: 'Bfrtip',
+                      buttons: [
+                          {
+                          extend: 'print',
+                          messageTop:
+                          `
+                              <p style='text-align: right;'>ออกรายงานวันที่ <%=data.date.getDate%> เวลา <%=data.date.getTime%> </p>
+                              <div style="text-align: center;">
+                                  <img src="images/logo.jpg" width="100px" height="100px"  >
+                              </div><br>
+                              <h2 style='text-align: center;'>รายงานเวลาการทำงาน </h2>
+                              <h3 style='text-align: center;'><%= data.date.getNow%> </h3>
+                              <table style="float:right">
+                                  <tr><td></td><td></td><td></td></tr>
+                                  <tbody>
+                                      <tr>
+                                          <td class="text-bold">รายงานของ </td>
+                                          <td> :   <b><%=data.session.user%></b>  </td>
+                                      </tr>
+                                      <tr>
+                                          <td class="text-bold">รวมเวลา </td>
+                                          <td> : <%=data.getAll_time%>  ชั่วโมง </td>
+                                      </tr>
+                                      <tr>
+                                          <td class="text-bold">รวมเงินที่ได้ </td>
+                                          <td> : <%=data.getAll_money%>  บาท </td>
+                                      </tr>
+                          
+                                  </tbody>
+                              </table>
+                          `,
+      
+                          messageBottom: 
+                          `   
+                          `
+                          }
+                      ]
+                  });
+      } );
+    
+    </script>
+
+
+
+    
+<%} %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include("footer") %> 

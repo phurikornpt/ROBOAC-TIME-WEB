@@ -218,3 +218,97 @@ exports.job = (req, res) => {
        })
    }
 };
+
+
+exports.oldtime = (req, res) => {
+    // Have year and month - ---------------------------------------------------------------------------
+    
+    const MONTH = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","พฤษภาคม","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+    if(req.session.user == "" ||req.session.user == undefined ){
+       res.redirect('/');
+   }else{
+        
+        if(req.query.month === undefined){
+            let data = {
+                session:{
+                    user:req.session.user || ''
+                }
+            }
+            res.render('oldtime',{data:data});
+
+        }else{
+
+            // console.log(req.query.month);
+
+            let now_time = req.query.month;
+            let split = now_time.split('-')
+            if(split[1][0] == "0"){
+                split[1]=split[1][1]
+                now_time = split[0]+"-"+split[1]
+            }
+            console.log(split);
+            
+            let data = {
+                date:{
+                    getDay:date.getDate(),
+                    getMonth:date.getMonth(),
+                    getNameMonth:MONTH[Number(split[1])-1],
+                    getYear:date.getFullYear(),
+                    getDate:getDate.date(),
+                    getTime:getDate.currentTime(),
+                    getNow:req.query.month
+                },
+                session:{
+                    user:req.session.user || ''
+                }
+            }
+            
+     
+            let sql = `SELECT * FROM public.data where data.user_id = ${req.session.user_id} and data.real_date LIKE '%${now_time}%' ORDER BY data.date`;
+            // let sql = `SELECT * FROM data where data.user_id = ${req.session.user_id} order BY data.date`;
+            
+            con.query(sql,function(err,result){
+                if(!err){
+                    // console.log(result);
+
+                    let h = 0;
+                    let m = 0;
+                    let allTime = 0;
+                    let allMoney = 0;
+                    data["userData"]=result.rows || [];
+                    // cal - all time
+                    // console.log(result);
+                    for(let i of result.rows){
+                        /* getTime[0] = h */
+                        /* getTime[1] = m */
+                        let getTime = i.time.split(":");
+                        h+= parseInt(getTime[0]);
+                        m+= parseInt(getTime[1]);
+                        
+                    }
+                    let s = (h*60) + m;
+                    h = parseInt(s/60);
+                    m = s % 60;
+                    let all = "";
+                    if(h<10){
+                        all += `0${h}`;
+                    }else{
+                        all += `${h}`;
+                    }
+                    all+=":";
+                    if(m<10){
+                        all += `0${m}`;
+                    }else{
+                        all += `${m}`;
+                    }
+                    data["getAll_time"]=all;
+                    data["getAll_money"]=h*50;
+                    // console.log(data);
+                    res.render('oldtime',{data:data});
+                }
+            })
+        }
+       
+   }
+    
+};

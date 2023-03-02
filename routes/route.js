@@ -14,5 +14,6 @@ router.get('/job', loginController.job);
 router.get('/del', loginController.del);
 router.post('/save_time', loginController.save_time);
 
+router.get('/oldtime', loginController.oldtime);
 
 module.exports = router;
